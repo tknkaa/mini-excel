@@ -4,6 +4,7 @@
     y: number;
     isSelected: boolean;
     value: string;
+    isWritable: boolean;
   };
 
   const rows = 10;
@@ -16,6 +17,7 @@
         y,
         isSelected: false,
         value: "",
+        isWritable: false,
       })),
     ),
   );
@@ -63,13 +65,34 @@
   {#each grid as row}
     <div class="row">
       {#each row as cell}
-        <button
-          class="cell {cell.isSelected ? 'selected' : ''}"
-          onmousedown={(event) => handleMouseDown(event)}
-          onmouseup={(event) => handleMouseUp(event)}
-        >
-          {cell.value}
-        </button>
+        {#if cell.isWritable}
+          <input
+            type="text"
+            class="cell"
+            bind:value={cell.value}
+            onchange={(event: Event) => {
+              cell.value = (event.target as HTMLInputElement).value;
+            }}
+            onkeydown={(event: KeyboardEvent) => {
+              if (event.key === "Enter") {
+                cell.isWritable = false;
+                cell.isSelected = false;
+              }
+            }}
+          />
+        {:else}
+          <button
+            class="cell {cell.isSelected ? 'selected' : ''}"
+            onmousedown={(event) => handleMouseDown(event)}
+            onmouseup={(event) => handleMouseUp(event)}
+            ondblclick={(event) => {
+              event.preventDefault();
+              cell.isWritable = true;
+            }}
+          >
+            {cell.value}
+          </button>
+        {/if}
       {/each}
     </div>
   {/each}
@@ -79,21 +102,18 @@
   .grid {
     display: grid;
     grid-template-columns: repeat(10, 1fr);
-    gap: 2px;
   }
   .row {
     display: contents;
   }
   .cell {
-    padding: 10px;
+    width: 6em;
+    height: 3em;
     border: 1px solid #ccc;
-    text-align: center;
     cursor: pointer;
-    user-select: none;
     background-color: white;
   }
   .cell.selected {
-    background-color: #007bff;
-    color: white;
+    background-color: gray;
   }
 </style>
