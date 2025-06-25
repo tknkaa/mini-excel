@@ -40,7 +40,6 @@
     const cell = convertLocationToCell(event);
     if (cell) {
       leftTopCell = cell;
-      cell.isSelected = true;
     }
   }
 
@@ -86,7 +85,6 @@
             onmousedown={(event) => handleMouseDown(event)}
             onmouseup={(event) => handleMouseUp(event)}
             ondblclick={(event) => {
-              event.preventDefault();
               cell.isWritable = true;
             }}
           >
@@ -110,6 +108,7 @@
     width: 6em;
     height: 3em;
     border: 1px solid #ccc;
+    box-sizing: border-box;
     cursor: pointer;
     background-color: white;
   }
