@@ -1,11 +1,7 @@
 <script lang="ts">
-  type Cell = {
-    x: number;
-    y: number;
-    isSelected: boolean;
-    value: string;
-    isWritable: boolean;
-  };
+  import { setupPlot } from "$lib/chart";
+  import type { Cell } from "$lib/types.ts";
+  import { Chart } from "chart.js";
 
   const rows = 10;
   const cols = 10;
@@ -58,6 +54,22 @@
       }
     }
   }
+
+  function createPlot() {
+    const selectedCells = grid.flat().filter((cell) => cell.isSelected);
+    if (selectedCells.length % 2 !== 0) {
+      alert("Please select an even number of cells.");
+      return;
+    }
+
+    const values = selectedCells.map((cell) => parseFloat(cell.value));
+    if (values.some((value) => isNaN(value))) {
+      alert("Invalid value in selected cells. Please enter valid numbers.");
+      return;
+    }
+
+    const config = setupPlot(values);
+  }
 </script>
 
 <div class="grid">
@@ -95,6 +107,7 @@
     </div>
   {/each}
 </div>
+<button onclick={createPlot}>Create Plot</button>
 
 <style>
   .grid {
