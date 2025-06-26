@@ -1,7 +1,16 @@
 <script lang="ts">
   import { setupPlot } from "$lib/chart";
   import type { Cell } from "$lib/types.ts";
-  import { Chart } from "chart.js";
+  import {
+    Chart,
+    ScatterController,
+    LinearScale,
+    PointElement,
+    Tooltip,
+    Legend,
+  } from "chart.js/auto";
+
+  Chart.register(ScatterController, LinearScale, PointElement, Tooltip, Legend);
 
   const rows = 10;
   const cols = 10;
@@ -55,20 +64,27 @@
     }
   }
 
+  let chartInstance: Chart | null = null;
+
   function createPlot() {
     const selectedCells = grid.flat().filter((cell) => cell.isSelected);
     if (selectedCells.length % 2 !== 0) {
       alert("Please select an even number of cells.");
       return;
     }
-
+    console.log("Selected cells:", selectedCells);
     const values = selectedCells.map((cell) => parseFloat(cell.value));
     if (values.some((value) => isNaN(value))) {
       alert("Invalid value in selected cells. Please enter valid numbers.");
       return;
     }
-
+    console.log("Selected values:", values);
+    const ctx = document.getElementById("chart") as HTMLCanvasElement;
     const config = setupPlot(values);
+    if (chartInstance) {
+      chartInstance.destroy();
+    }
+    chartInstance = new Chart(ctx, config);
   }
 </script>
 
@@ -108,6 +124,7 @@
   {/each}
 </div>
 <button onclick={createPlot}>Create Plot</button>
+<div style="width: 500px"><canvas id="chart"></canvas></div>
 
 <style>
   .grid {

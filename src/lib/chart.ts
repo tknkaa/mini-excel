@@ -6,17 +6,19 @@ type Vertex = {
 }
 export function setupPlot(values: number[]): ChartConfiguration {
   const rawData: Vertex[] = [];
-  for (let i = 0; i < values.length; i += 2) {
+  for (let i = 0; i < values.length / 2; i += 1) {
     rawData.push({
       x: values[i],
-      y: values[i + 1]
+      y: values[i + values.length / 2]
     })
   }
+  console.log(rawData);
   const data = {
     datasets: [{
       label: "Scatter Dataset",
       data: rawData,
-      backgroundColor: "white"
+      backgroundColor: "white",
+      borderColor: "black",
     }]
   }
 
@@ -27,7 +29,7 @@ export function setupPlot(values: number[]): ChartConfiguration {
       scales: {
         x: {
           type: "linear",
-          position: "bottom",
+          position: "bottom"
         }
       }
     }
