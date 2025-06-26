@@ -111,11 +111,12 @@
 
 <style>
   .grid {
-    display: grid;
-    grid-template-columns: repeat(10, 1fr);
+    display: flex;
+    flex-direction: row;
   }
   .row {
-    display: contents;
+    display: flex;
+    flex-direction: column;
   }
   .cell {
     width: 6em;
