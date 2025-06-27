@@ -1,6 +1,6 @@
 <script lang="ts">
   import { setupPlot } from "$lib/chart";
-  import type { Cell } from "$lib/types.ts";
+  import type { CellType } from "$lib/types.ts";
   import {
     Chart,
     ScatterController,
@@ -9,6 +9,7 @@
     Tooltip,
     Legend,
   } from "chart.js/auto";
+  import Cell from "$lib/components/Cell.svelte";
 
   Chart.register(ScatterController, LinearScale, PointElement, Tooltip, Legend);
 
@@ -143,7 +144,7 @@
     cursor: pointer;
     background-color: white;
   }
-  .cell.selected {
+  .selected {
     background-color: gray;
   }
 </style>
